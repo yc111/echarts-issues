@@ -13,10 +13,16 @@
 <body align="center">
     <div>
         <h1>问题复现</h1>
+        <p style="color:red">复现操作：鼠标悬浮到地图，观察分组名，全都是第一个系列的名称</p>
         <p>
-            <span>issue 链接:</span>
-            <a href="https://github.com/apache/incubator-echarts/issues/11347"><span>https://github.com/apache/incubator-echarts/issues/11347</span></a>
+            <span>issues 链接:</span>
+            <a
+                href="https://github.com/apache/incubator-echarts/issues/11347"><span>https://github.com/apache/incubator-echarts/issues/11347</span></a>
         </p>
+        <p>
+            <a href="https://github.com/yc111/echarts-issues/blob/master/index.html"><span>查看源码</span></a>
+        </p>
+
     </div>
 
     <div id="main" style="width: 600px; height:400px; margin: 0 auto;"></div>
@@ -27,7 +33,7 @@
             echarts.registerMap('china', data);
 
             var option = {
-                color: ['#ff00ff', '#00ff00'],
+                color: ['#469fe3', '#766baa'],
                 tooltip: {
                     trigger: 'item',
                     showDelay: 0,
@@ -48,7 +54,7 @@
                     min: 0,
                     max: 100,
                     inRange: {
-                        color: ['#ff00ff', '#fee090', '#00ff00']
+                color: ['#469fe3', '#766baa']
                     },
                     text: ['High', 'Low'],
                     calculable: true
