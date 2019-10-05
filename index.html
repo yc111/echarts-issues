@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/echarts/4.3.0-rc.2/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <title>echarts-issues</title>
+</head>
+
+<body align="center">
+    <div>
+        <h1>问题复现</h1>
+        <p>
+            <span>issue 链接:</span>
+            <a href="https://github.com/apache/incubator-echarts/issues/11347"><span>https://github.com/apache/incubator-echarts/issues/11347</span></a>
+        </p>
+    </div>
+
+    <div id="main" style="width: 600px; height:400px; margin: 0 auto;"></div>
+
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        $.getJSON('./data/china.json', function (data) {
+            echarts.registerMap('china', data);
+
+            var option = {
+                color: ['#ff00ff', '#00ff00'],
+                tooltip: {
+                    trigger: 'item',
+                    showDelay: 0,
+                    transitionDuration: 0.2,
+                    /**
+                     * 掉formatter，分组就可以正确对应
+                     * */
+                    formatter: function (params) {
+                        // console.log(params);
+                        /**
+                         * params.seriesName 不能跟所在分组对上
+                         * */
+                        return params.name + '<br />' + params.seriesName
+                    }
+                },
+                visualMap: {
+                    left: 'right',
+                    min: 0,
+                    max: 100,
+                    inRange: {
+                        color: ['#ff00ff', '#fee090', '#00ff00']
+                    },
+                    text: ['High', 'Low'],
+                    calculable: true
+                },
+                legend: {
+                    data: ['分组1', '分组2']
+                },
+                series: [{
+                    name: '分组1',
+                    type: 'map',
+                    map: 'china',
+                    data: [{
+                        name: "新疆",
+                        value: 30
+                    }]
+                }, {
+                    name: '分组2',
+                    type: 'map',
+                    map: 'china',
+                    data: [{
+                        name: "西藏",
+                        value: 80
+                    }]
+                }]
+            };
+
+            myChart.setOption(option);
+        })
+    </script>
+</body>
+
+</html>
