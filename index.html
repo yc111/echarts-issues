@@ -12,76 +12,110 @@
 
 <body align="center">
     <div>
-        <h1>问题复现</h1>
-        <p style="color:red">复现操作：鼠标悬浮到地图，观察分组名，全都是第一个系列的名称</p>
+        <h1>问题复现(右侧地图)
+            <span style="font-size: 18px">
+                <a href="https://github.com/yc111/echarts-issues/blob/master/index.html"><span>查看源码</span></a>
+            </span>
+        </h1>
+        <p>复现操作：鼠标悬浮到地图，观察分组名称</p>
         <p>
             <span>issues 链接:</span>
             <a
                 href="https://github.com/apache/incubator-echarts/issues/11347"><span>https://github.com/apache/incubator-echarts/issues/11347</span></a>
         </p>
-        <p>
-            <a href="https://github.com/yc111/echarts-issues/blob/master/index.html"><span>查看源码</span></a>
-        </p>
 
     </div>
-
-    <div id="main" style="width: 600px; height:400px; margin: 0 auto;"></div>
+    <div style="margin: 0 auto; margin-top: 60px">
+        <div id="main1" style="width: 600px; height:400px; display:inline-block"></div>
+        <div id="main2" style="width: 600px; height:400px; display:inline-block"></div>
+    </div>
 
     <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('main'));
+        let myChart1 = echarts.init(document.getElementById('main1'));
+        let myChart2 = echarts.init(document.getElementById('main2'));
+
+        let color = ['#469fe3', '#766baa'];
+        let title1 = {
+            text: '不使用formatter，tooltip中分组能区分不同series'
+        };
+        let title2 = {
+            text: '使用formatter，tooltip中分组永远是第一个series',
+            textStyle: {color: '#ff0000'}
+        };
+        let tooltip1 = {
+            trigger: 'item',
+            showDelay: 0,
+            transitionDuration: 0.2,
+            /**
+             * 不使用formatter，分组就可以正确对应
+             * */
+        };
+        let tooltip2 = {
+            trigger: 'item',
+            showDelay: 0,
+            transitionDuration: 0.2,
+            formatter: function (params) {
+                // console.log(params);
+                /**
+                 * params.seriesName 不能跟所在分组对上
+                 * */
+                return params.name + '<br />' + params.seriesName
+            }
+        };
+        let visualMap = {
+            left: 'right',
+            min: 0,
+            max: 100,
+            inRange: {
+                color: ['#469fe3', '#766baa']
+            },
+            text: ['High', 'Low'],
+            calculable: true
+        };
+        let legend = {
+            top: 30,
+            data: ['分组1', '分组2']
+        };
+        let series = [{
+            name: '分组1',
+            type: 'map',
+            map: 'china',
+            data: [{
+                name: "新疆",
+                value: 30
+            }]
+        }, {
+            name: '分组2',
+            type: 'map',
+            map: 'china',
+            data: [{
+                name: "西藏",
+                value: 80
+            }]
+        }];
         $.getJSON('./data/china.json', function (data) {
             echarts.registerMap('china', data);
 
-            var option = {
-                color: ['#469fe3', '#766baa'],
-                tooltip: {
-                    trigger: 'item',
-                    showDelay: 0,
-                    transitionDuration: 0.2,
-                    /**
-                     * 不使用formatter，分组就可以正确对应
-                     * */
-                    formatter: function (params) {
-                        // console.log(params);
-                        /**
-                         * params.seriesName 不能跟所在分组对上
-                         * */
-                        return params.name + '<br />' + params.seriesName
-                    }
-                },
-                visualMap: {
-                    left: 'right',
-                    min: 0,
-                    max: 100,
-                    inRange: {
-                color: ['#469fe3', '#766baa']
-                    },
-                    text: ['High', 'Low'],
-                    calculable: true
-                },
-                legend: {
-                    data: ['分组1', '分组2']
-                },
-                series: [{
-                    name: '分组1',
-                    type: 'map',
-                    map: 'china',
-                    data: [{
-                        name: "新疆",
-                        value: 30
-                    }]
-                }, {
-                    name: '分组2',
-                    type: 'map',
-                    map: 'china',
-                    data: [{
-                        name: "西藏",
-                        value: 80
-                    }]
-                }]
+            let option1 = {
+                color: color,
+                title: title1,
+                tooltip: tooltip1,
+                visualMap: visualMap,
+                legend: legend,
+                series: series
+            };
+            
+            let option2 = {
+                color: color,
+                title: title2,
+                tooltip: tooltip2,
+                visualMap: visualMap,
+                legend: legend,
+                series: series
             };
 
-            myChart.setOption(option);
+            myChart1.setOption(option1);
+            myChart2.setOption(option2);
         })
     </script>
 </body>
