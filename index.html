@@ -33,6 +33,8 @@
     <script type="text/javascript">
         let myChart1 = echarts.init(document.getElementById('main1'));
         let myChart2 = echarts.init(document.getElementById('main2'));
+        myChart1.showLoading();
+        myChart2.showLoading();
 
         let color = ['#469fe3', '#766baa'];
         let title1 = {
@@ -40,7 +42,9 @@
         };
         let title2 = {
             text: '使用formatter，tooltip中分组永远是第一个series',
-            textStyle: {color: '#ff0000'}
+            textStyle: {
+                color: '#ff0000'
+            }
         };
         let tooltip1 = {
             trigger: 'item',
@@ -95,6 +99,8 @@
         }];
         $.getJSON('./data/china.json', function (data) {
             echarts.registerMap('china', data);
+            myChart1.hideLoading();
+            myChart2.hideLoading();
 
             let option1 = {
                 color: color,
@@ -104,7 +110,7 @@
                 legend: legend,
                 series: series
             };
-            
+
             let option2 = {
                 color: color,
                 title: title2,
